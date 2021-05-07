@@ -1,0 +1,21 @@
+def ga_model(cost):
+    n, c, max_iter = 10, cost.shape[0], 10000 
+    
+    population = np.random.rand(n,c)
+    fitness    = get_fitness(population, cost)        
+    
+    optimal_value    = fitness.min()
+    optimal_solution = population[np.where(fitness==optimal_value)][0]    
+    
+    for i in range(max_iter):                
+        population = random_selection(population)
+        population = single_point_crossover(population)                        
+        population = shift_mutation(population)        
+                
+        fitness = get_fitness(population, cost)
+                
+        if fitness.min() < optimal_value:
+            optimal_value    = fitness.min()
+            optimal_solution = population[np.where(fitness==optimal_value)][0]                               
+        
+    return get_destination(optimal_solution), optimal_value
